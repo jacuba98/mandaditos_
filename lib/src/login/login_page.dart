@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
 
 class loginpage extends StatefulWidget {
@@ -15,16 +16,57 @@ class _loginpageState extends State<loginpage> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        child: Column(
+        child: Stack(
           children: [
-            _imageBanner(),
-            _textfieldEmail(),
-            _textfieldPassword(),
-            _buttonLogin(),
-            _textDontHaveAcount(),
+            Positioned(
+              top: -80,
+              left: -90,
+              child: _circleLogin(),
+            ),
+            Positioned(child: _textLogin(),
+              top: 60,
+              left: 30,
+            ),
+            Column(
+              children: [
+                _lottieAnimation(),
+                //_imageBanner(),
+                _textfieldEmail(),
+                _textfieldPassword(),
+                _buttonLogin(),
+                _textDontHaveAcount(),
+              ],
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _lottieAnimation(){
+    return Container(
+      margin: EdgeInsets.only(
+          top: 150,
+          bottom: MediaQuery.of(context).size.height * 0.17
+      ),
+      child: Lottie.asset(
+        'assets/json/delivery.json',
+        width: 350,
+        height: 200,
+        fit: BoxFit.fill
+      ),
+    );
+  }
+
+  Widget _textLogin(){
+    return Text(
+      'LOGIN',
+      style: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+        fontFamily: 'NimbusSans'
+      )
     );
   }
 
@@ -116,7 +158,18 @@ class _loginpageState extends State<loginpage> {
     );
   }
 
-  Widget _imageBanner() {
+  Widget _circleLogin(){
+    return Container(
+      width: 240,
+      height: 230,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: MyColors.primaryColor
+      ),
+    );
+  }
+
+  /*Widget _imageBanner() {
     return Container(
       margin: EdgeInsets.only(
         top: 100,
@@ -128,5 +181,5 @@ class _loginpageState extends State<loginpage> {
         height: 200,
       ),
     );
-  }
+  } */
 }
