@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mandaditos_expres/src/login/login_page.dart';
+import 'package:mandaditos_expres/src/register/register_page.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
 
 void main() {
@@ -7,7 +8,7 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -21,7 +22,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: 'login',
       routes: {
-        'login': (BuildContext context) => loginpage()
+        'login': (BuildContext context) => loginpage(),
+        'register': (BuildContext context) => RegisterPage()
       },
       theme: ThemeData(
         fontFamily: 'NimbusSans',

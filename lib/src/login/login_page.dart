@@ -1,16 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mandaditos_expres/src/login/login_controller.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
 
 class loginpage extends StatefulWidget {
-  const loginpage({Key? key}) : super(key: key);
+  const loginpage({Key key}) : super(key: key);
 
   @override
   _loginpageState createState() => _loginpageState();
 }
 
 class _loginpageState extends State<loginpage> {
+  LoginController _con = new LoginController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SchedulerBinding.instance.addPersistentFrameCallback((timeStamp) {
+      _con.init(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,15 +40,17 @@ class _loginpageState extends State<loginpage> {
               top: 60,
               left: 30,
             ),
-            Column(
-              children: [
-                _lottieAnimation(),
-                //_imageBanner(),
-                _textfieldEmail(),
-                _textfieldPassword(),
-                _buttonLogin(),
-                _textDontHaveAcount(),
-              ],
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  _lottieAnimation(),
+                  //_imageBanner(),
+                  _textfieldEmail(),
+                  _textfieldPassword(),
+                  _buttonLogin(),
+                  _textDontHaveAcount(),
+                ],
+              ),
             ),
           ],
         ),
@@ -81,11 +96,14 @@ class _loginpageState extends State<loginpage> {
           ),
         ),
         SizedBox(width: 7),
-        Text(
-          'Registrate',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: MyColors.primaryColor
+        GestureDetector(
+          onTap: _con.goToRegisterPage,
+          child: Text(
+            'Registrate',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: MyColors.primaryColor
+            ),
           ),
         ),
       ],
@@ -95,9 +113,9 @@ class _loginpageState extends State<loginpage> {
   Widget _buttonLogin(){
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _con.login,
         child: Text('INGRESAR'),
         style: ElevatedButton.styleFrom(
           primary: MyColors.primaryColor,
@@ -118,6 +136,8 @@ class _loginpageState extends State<loginpage> {
           borderRadius: BorderRadius.circular(30)
       ),
       child: TextField(
+        controller: _con.passwordController,
+        obscureText: true,
         decoration: InputDecoration(
             hintText: 'Contraseña',
             border: InputBorder.none,
@@ -142,6 +162,8 @@ class _loginpageState extends State<loginpage> {
         borderRadius: BorderRadius.circular(30)
       ),
       child: TextField(
+        controller: _con.emailController,
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           hintText: 'Correo Electronico',
           border: InputBorder.none,
