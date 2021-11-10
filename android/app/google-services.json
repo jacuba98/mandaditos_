@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "201836124527",
+    "project_id": "delivery-app-f1709",
+    "storage_bucket": "delivery-app-f1709.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201836124527:android:ffa2a6ea2f139f245fb09a",
+        "android_client_info": {
+          "package_name": "com.example.mandaditos_expres"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201836124527-snrb6c32rfkfkaqu03ccr5sbaniftntk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mandaditos_expres",
+            "certificate_hash": "f06db049e797d771b2c99af8b4ef9fb674fcc432"
+          }
+        },
+        {
+          "client_id": "201836124527-dfbq1na7a2c30evu82kbf0ku90k9cn70.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8K6EfIjMdtQl83fzMMnJ6XCHawXXyCYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201836124527-dfbq1na7a2c30evu82kbf0ku90k9cn70.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

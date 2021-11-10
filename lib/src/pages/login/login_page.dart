@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mandaditos_expres/src/login/login_controller.dart';
+import 'package:mandaditos_expres/src/pages/login/login_controller.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
 
 class loginpage extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:mandaditos_expres/src/register/register_controller.dart';
+import 'package:mandaditos_expres/src/pages/register/register_controller.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -78,7 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _iconBack(){
     return IconButton(
-        onPressed: () {},
+        onPressed: _con.back,
         icon: Icon(Icons.arrow_back_ios, color: Colors.white)
     );
   }
