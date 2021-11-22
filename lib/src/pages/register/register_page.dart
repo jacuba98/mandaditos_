@@ -11,14 +11,16 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
   RegisterController _con = new RegisterController();
-  
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    SchedulerBinding.instance.addPersistentFrameCallback((timeStamp) {
-      _con.init(context);
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _con.init(context, refresh);
     });
   }
 
@@ -30,11 +32,12 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Stack(
           children: [
             Positioned(
-              top: -80,
-              left: -90,
-              child: _circle(),
+                top: -80,
+                left: -100,
+                child: _circle()
             ),
-            Positioned(child: _textRegister(),
+            Positioned(
+              child: _textRegister(),
               top: 65,
               left: 27,
             ),
@@ -51,12 +54,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     _imageUser(),
                     SizedBox(height: 30),
-                    _textfieldEmail(),
-                    _textfieldName(),
-                    _textfieldLastName(),
-                    _textfieldPhone(),
-                    _textfieldPassword(),
-                    _textfieldConfirmPassword(),
+                    _textFieldEmail(),
+                    _textFieldName(),
+                    _textFieldLastName(),
+                    _textFieldPhone(),
+                    _textFieldPassword(),
+                    _textFieldConfirmPassword(),
                     _buttonLogin()
                   ],
                 ),
@@ -64,28 +67,33 @@ class _RegisterPageState extends State<RegisterPage> {
             )
           ],
         ),
-      )
+      ),
     );
   }
 
-  Widget _imageUser(){
-    return CircleAvatar(
-      backgroundImage: AssetImage('assets/img/user_profile.png'),
-      radius: 60,
-      backgroundColor: Colors.grey[200],
+  Widget _imageUser() {
+    return GestureDetector(
+      onTap: _con.showAlertDialog,
+      child: CircleAvatar(
+        backgroundImage: _con.imageFile != null
+            ? FileImage(_con.imageFile)
+            : AssetImage('assets/img/user_profile_2.png'),
+        radius: 60,
+        backgroundColor: Colors.grey[200],
+      ),
     );
   }
 
-  Widget _iconBack(){
+  Widget _iconBack() {
     return IconButton(
         onPressed: _con.back,
         icon: Icon(Icons.arrow_back_ios, color: Colors.white)
     );
   }
 
-  Widget _textRegister(){
+  Widget _textRegister() {
     return Text(
-        'REGISTER',
+        'REGISTRO',
         style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -95,25 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buttonLogin(){
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-      child: ElevatedButton(
-        onPressed: _con.register,
-        child: Text('REGISTRARSE'),
-        style: ElevatedButton.styleFrom(
-            primary: MyColors.primaryColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)
-            ),
-            padding: EdgeInsets.symmetric(vertical: 15)
-        ),
-      ),
-    );
-  }
-
-  Widget _textfieldEmail(){
+  Widget _textFieldEmail() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
       decoration: BoxDecoration(
@@ -124,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
         controller: _con.emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-            hintText: 'Correo Electronico',
+            hintText: 'Correo electronico',
             border: InputBorder.none,
             contentPadding: EdgeInsets.all(15),
             hintStyle: TextStyle(
@@ -139,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _textfieldName(){
+  Widget _textFieldName() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
       decoration: BoxDecoration(
@@ -164,7 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _textfieldLastName(){
+  Widget _textFieldLastName() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
       decoration: BoxDecoration(
@@ -189,7 +179,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _textfieldPhone(){
+  Widget _textFieldPhone() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
       decoration: BoxDecoration(
@@ -215,7 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _textfieldPassword(){
+  Widget _textFieldPassword() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
       decoration: BoxDecoration(
@@ -240,7 +230,8 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-  Widget _textfieldConfirmPassword(){
+
+  Widget _textFieldConfirmPassword() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
       decoration: BoxDecoration(
@@ -248,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
           borderRadius: BorderRadius.circular(30)
       ),
       child: TextField(
-        controller: _con.confirmPasswordController,
+        controller: _con.confirmPassswordController,
         obscureText: true,
         decoration: InputDecoration(
             hintText: 'Confirmar Contraseña',
@@ -266,7 +257,25 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _circle(){
+  Widget _buttonLogin() {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+      child: ElevatedButton(
+        onPressed: _con.isEnable ? _con.register : null,
+        child: Text('REGISTRARSE'),
+        style: ElevatedButton.styleFrom(
+            primary: MyColors.primaryColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30)
+            ),
+            padding: EdgeInsets.symmetric(vertical: 15)
+        ),
+      ),
+    );
+  }
+
+  Widget _circle() {
     return Container(
       width: 240,
       height: 230,
@@ -277,4 +286,9 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  void refresh() {
+    setState(() {
+
+    });
+  }
 }

@@ -26,11 +26,33 @@ class _RestaurantOrdersLitsPageState extends State<RestaurantOrdersLitsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _con.key,
+      appBar: AppBar(
+        leading: _menuDrawer(),
+      ),
+      drawer: _drawer(),
       body: Center(
         child: Text('Restaurant order list'),
       ),
     );
   }
+
+  /*Widget build(BuildContext context) {
+    return Scaffold(
+      key: _con.key,
+      appBar: AppBar(
+        leading: _menuDrawer(),
+      ),
+      drawer: _drawer(),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: _con.logout,
+          child: Text('Cerrar Sesion!'),
+        ),
+      ),
+    );
+  }*/
+
   Widget _menuDrawer(){
     return GestureDetector(
       onTap: _con.openDrawer,
@@ -97,13 +119,16 @@ class _RestaurantOrdersLitsPageState extends State<RestaurantOrdersLitsPage> {
                 ],
               )
           ),
+
           ListTile(
-            title: Text('Editar Perfil'),
-            trailing: Icon(Icons.edit_outlined),
+            onTap: _con.goToCategoryCreate,
+            title: Text('Crear Categoria'),
+            trailing: Icon(Icons.list_alt),
           ),
           ListTile(
-            title: Text('Mis Pedidos'),
-            trailing: Icon(Icons.shopping_cart_outlined),
+            onTap: _con.goToProductosCreate,
+            title: Text('Crear Producto'),
+            trailing: Icon(Icons.add_business),
           ),
           _con.user != null ?
           _con.user.roles.length > 1 ?

@@ -34,7 +34,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
       body: Center(
         child: ElevatedButton(
           onPressed: _con.logout,
-          child: Text('Cerrar Sesionnnnnn!'),
+          child: Text('Cerrar Sesion!'),
         ),
       ),
     );
@@ -108,6 +108,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
               )
           ),
           ListTile(
+            onTap: _con.goToUpdatePage,
             title: Text('Editar Perfil'),
             trailing: Icon(Icons.edit_outlined),
           ),

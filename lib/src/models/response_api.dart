@@ -17,17 +17,16 @@ class ResponseApi {
     this.success,
   });
 
-
-
   ResponseApi.fromJson(Map<String, dynamic> json) {
+
     message = json["message"];
     error = json["error"];
     success = json["success"];
 
-    try{
+    try {
       data = json['data'];
-    } catch(e){
-      print('Exeption data $e');
+    } catch(e) {
+      print('Exception data $e');
     }
 
   }

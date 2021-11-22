@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mandaditos_expres/src/models/response_api.dart';
 import 'package:mandaditos_expres/src/models/user.dart';
 import 'package:mandaditos_expres/src/provider/user_provider.dart';
 import 'package:mandaditos_expres/src/utils/my_snackbar.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
 
 class RegisterController {
 
@@ -12,60 +17,128 @@ class RegisterController {
   TextEditingController lastnameController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
-  TextEditingController confirmPasswordController = new TextEditingController();
+  TextEditingController confirmPassswordController = new TextEditingController();
 
-  UserProvider userProvider = UserProvider();
+  UserProvider usersProvider = new UserProvider();
 
-  Future init(BuildContext context) {
+  PickedFile pickedFile;
+  File imageFile;
+  Function refresh;
+
+  ProgressDialog _progressDialog;
+
+  bool isEnable = true;
+
+  Future init(BuildContext context, Function refresh) {
     this.context = context;
-    userProvider.init(context);
+    this.refresh = refresh;
+    usersProvider.init(context);
+    _progressDialog = ProgressDialog(context: context);
   }
 
-  void register() async{
+  void register() async {
     String email = emailController.text.trim();
     String name = nameController.text;
     String lastname = lastnameController.text;
     String phone = phoneController.text.trim();
     String password = passwordController.text.trim();
-    String confirmpassword = confirmPasswordController.text.trim();
+    String confirmPassword = confirmPassswordController.text.trim();
 
-    if(email.isEmpty || name.isEmpty || lastname.isEmpty || phone.isEmpty || password.isEmpty || confirmpassword.isEmpty){
-      MySnackbar.show(context, '¡Debes ingresar todos los campos!');
+    if (email.isEmpty || name.isEmpty || lastname.isEmpty || phone.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      MySnackbar.show(context, 'Debes ingresar todos los campos');
       return;
     }
 
-    if(confirmpassword != password ){
-      MySnackbar.show(context, '¡Las contraseñas no coinciden!');
+    if (confirmPassword != password) {
+      MySnackbar.show(context, 'Las contraseñas no coinciden');
       return;
     }
 
-    if(password.length < 8){
-      MySnackbar.show(context, '¡La contraseña debe de tener al menos 8 caracteres!');
+    if (password.length < 6) {
+      MySnackbar.show(context, 'Las contraseña debe tener al menos 6 caracteres');
       return;
     }
+
+    if (imageFile == null) {
+      MySnackbar.show(context, 'Selecciona una imagen');
+      return;
+    }
+
+    _progressDialog.show(max: 100, msg: 'Espere un momento...');
+    isEnable = false;
 
     User user = new User(
-      email: email,
-      name: name,
-      lastname: lastname,
-      phone: phone,
-      password: password
+        email: email,
+        name: name,
+        lastname: lastname,
+        phone: phone,
+        password: password
     );
 
-    ResponseApi responseApi = await userProvider.create(user);
+    Stream stream = await usersProvider.createWithImage(user, imageFile);
+    stream.listen((res) {
 
-    MySnackbar.show(context, responseApi.message);
+      _progressDialog.close();
 
-    if (responseApi.success) {
-      Future.delayed(Duration(seconds: 3), () {
-        Navigator.pushReplacementNamed(context, 'login');
-      });
-    }
+      // ResponseApi responseApi = await usersProvider.create(user);
+      ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
+      print('RESPUESTA: ${responseApi.toJson()}');
+      MySnackbar.show(context, responseApi.message);
 
-    print('RESPUESTA: ${responseApi.toJson()}');
-
+      if (responseApi.success) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.pushReplacementNamed(context, 'login');
+        });
+      }
+      else {
+        isEnable = true;
+      }
+    });
   }
-  void back(){
+
+  Future selectImage(ImageSource imageSource) async {
+    pickedFile = await ImagePicker().getImage(source: imageSource);
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+    }
+    Navigator.pop(context);
+    refresh();
+  }
+
+  void showAlertDialog() {
+    Widget galleryButton = ElevatedButton(
+        onPressed: () {
+          selectImage(ImageSource.gallery);
+        },
+        child: Text('GALERIA')
+    );
+
+    Widget cameraButton = ElevatedButton(
+        onPressed: () {
+          selectImage(ImageSource.camera);
+        },
+        child: Text('CAMARA')
+    );
+
+    AlertDialog alertDialog = AlertDialog(
+      title: Text('Selecciona tu imagen'),
+      actions: [
+        galleryButton,
+        cameraButton
+      ],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        }
+    );
+  }
+
+  void back() {
     Navigator.pop(context);
   }
+
+
 }
