@@ -4,7 +4,6 @@ import 'package:mandaditos_expres/src/pages/client/update/client_update_page.dar
 import 'package:mandaditos_expres/src/pages/delivery/orders/list/delivery_orders_list_page.dart';
 import 'package:mandaditos_expres/src/pages/login/login_page.dart';
 import 'package:mandaditos_expres/src/pages/register/register_page.dart';
-import 'package:mandaditos_expres/src/pages/restaurant/categories/create/restaurant_categories_create_controller.dart';
 import 'package:mandaditos_expres/src/pages/restaurant/categories/create/restaurant_categories_create_page.dart';
 import 'package:mandaditos_expres/src/pages/restaurant/orders/list/restaurant_orders_list_page.dart';
 import 'package:mandaditos_expres/src/pages/restaurant/products/create/restaurant_products_create_page.dart';
@@ -41,8 +40,9 @@ class _MyAppState extends State<MyApp> {
         'restaurant/products/create' : (BuildContext context) => RestaurantProductsCreatePage()
       },
       theme: ThemeData(
-        fontFamily: 'NimbusSans',
-        primaryColor: MyColors.primaryColor
+        //fontFamily: 'NimbusSans',
+        primaryColor: MyColors.primaryColor,
+        appBarTheme: AppBarTheme(elevation: 0)
       ),
     );
   }

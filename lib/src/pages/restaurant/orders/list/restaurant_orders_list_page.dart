@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:mandaditos_expres/src/models/category.dart';
 import 'package:mandaditos_expres/src/pages/restaurant/orders/list/restaurant_orders_list_controller.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
 
@@ -25,14 +26,104 @@ class _RestaurantOrdersLitsPageState extends State<RestaurantOrdersLitsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _con.key,
-      appBar: AppBar(
-        leading: _menuDrawer(),
+    return DefaultTabController(
+      length: _con.categories.length,
+      child: Scaffold(
+        key: _con.key,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(170),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            actions: [
+              _shopingBag(),
+            ],
+            flexibleSpace: Column(
+              children: [
+                SizedBox(height: 40),
+                _menuDrawer(),
+                SizedBox(height: 20),
+                _textFielSearch()
+              ],
+            ),
+            bottom: TabBar(
+              indicatorColor: MyColors.primaryColor,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey[400],
+              isScrollable: true,
+              tabs: List<Widget>.generate(_con.categories.length, (index){
+                return Tab(
+                  child: Text(_con.categories[index].name ?? ''),
+                );
+              }),
+            ),
+          )
+        ),
+        drawer: _drawer(),
+        body: TabBarView(
+          children: _con.categories.map((Category category){
+            return Text('Hola');
+          }).toList(),
+        )
       ),
-      drawer: _drawer(),
-      body: Center(
-        child: Text('Restaurant order list'),
+    );
+  }
+
+  Widget _shopingBag(){
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.only(right: 15, top: 13),
+          child: Icon(
+            Icons.shopping_bag_outlined,
+            color: Colors.black,
+          ),
+        ),
+        Positioned(
+          right: 16,
+          top: 15,
+          child: Container(
+            width: 9,
+            height: 9,
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.all(Radius.circular(30))
+            ),
+
+          )
+        )
+      ],
+    );
+  }
+
+  Widget _textFielSearch(){
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: 'Buscar...',
+          suffixIcon: Icon(
+              Icons.search,
+              color: Colors.grey[400]
+          ),
+          hintStyle: TextStyle(
+            fontSize: 17,
+            color: Colors.grey[500],
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide(
+              color: Colors.grey[300],
+            )
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25),
+              borderSide: BorderSide(
+                color: Colors.grey[300],
+              )
+          ),
+          contentPadding: EdgeInsets.all(15),
+        ),
       ),
     );
   }
