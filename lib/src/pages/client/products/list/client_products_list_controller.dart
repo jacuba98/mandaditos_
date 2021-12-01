@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mandaditos_expres/src/models/category.dart';
 import 'package:mandaditos_expres/src/models/product.dart';
 import 'package:mandaditos_expres/src/models/user.dart';
+import 'package:mandaditos_expres/src/pages/client/products/detail/client_products_detail_page.dart';
 import 'package:mandaditos_expres/src/provider/categories_provider.dart';
 import 'package:mandaditos_expres/src/provider/products_provider.dart';
 import 'package:mandaditos_expres/src/utils/shared_pref.dart';
@@ -33,6 +34,13 @@ class ClientProductListController {
   void getCategories() async {
     categories = await _categoriesProvider.getAll();
     refresh();
+  }
+
+  void openBottomSheet(){
+    showModalBottomSheet(
+        context: context,
+        builder: (context) => ClientProductsDetailPageState()
+    );
   }
 
   void logout() {
