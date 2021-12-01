@@ -100,7 +100,9 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
 
   Widget _cardProduct(Product product){
     return GestureDetector(
-      onTap: _con.openBottomSheet,
+      onTap: () {
+        _con.openBottomSheet(product);
+      },
       child: Container(
         height: 250,
         child: Card(
@@ -161,7 +163,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
                   ),
                   Spacer(),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     child: Text(
                       '${product.price ?? 0}\$',
                       style: TextStyle(
