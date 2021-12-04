@@ -22,47 +22,48 @@ class ClientAddressMapController {
     checkGPS();
   }
 
-  void onMapCreated(GoogleMapController controller){
+  void onMapCreated(GoogleMapController controller) {
     controller.setMapStyle('[{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}]');
     _mapController.complete(controller);
   }
 
-  void updateLocation() async{
-    try{
-      await _determinePosition();//obtener posicion actual y obtener los persmisos
-      _position = await Geolocator.getLastKnownPosition(); //latitud y longitud
+  void updateLocation() async {
+    try {
+
+      await _determinePosition(); // OBTENER LA POSICION ACTUAL Y TAMBIEN SOLICITAR LOS PERMISOS
+      _position = await Geolocator.getLastKnownPosition(); // LAT Y LNG
       animateCameraToPosition(_position.latitude, _position.longitude);
-    }catch(e){
+
+    } catch(e) {
       print('Error: $e');
     }
   }
 
-  Future animateCameraToPosition(double lat, double lng) async{
-    GoogleMapController controller = await _mapController.future;
-    if(controller != null){
-      controller.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(lat, lng),
-            zoom: 13,
-            bearing: 0
-          )
-      ));
-    }
-  }
-
-  void checkGPS() async{
+  void checkGPS() async {
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
 
-    if(isLocationEnabled){
+    if (isLocationEnabled) {
       updateLocation();
     }
-    else{
+    else {
       bool locationGPS = await location.Location().requestService();
-      if(locationGPS){
+      if (locationGPS) {
         updateLocation();
       }
     }
+  }
 
+  Future animateCameraToPosition(double lat, double lng) async {
+    GoogleMapController controller = await _mapController.future;
+    if (controller != null) {
+      controller.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+              target: LatLng(lat, lng),
+              zoom: 13,
+              bearing: 0
+          )
+      ));
+    }
   }
 
   Future<Position> _determinePosition() async {
@@ -83,10 +84,10 @@ class ClientAddressMapController {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
 
     return await Geolocator.getCurrentPosition();
   }
+
 }

@@ -34,18 +34,82 @@ class _ClientAddressMapPageState extends State<ClientAddressMapPage> {
       ),
       body: Stack(
         children: [
-          _googleMaps()
+          _googleMaps(),
+          Container(
+            alignment: Alignment.center,
+            child: _iconMyLocation(),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 30),
+            alignment: Alignment.topCenter,
+            child: _cardAdderss(),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: _buttonAccept(),
+          )
         ],
       ),
     );
   }
+
+  Widget _buttonAccept(){
+    return Container(
+      height: 50,
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(vertical: 30, horizontal: 70),
+      child: ElevatedButton(
+        onPressed: () {},
+        child: Text(
+            'Selecciona este punto'
+        ),
+        style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30)
+            ),
+            primary: MyColors.primaryColor
+        ),
+      ),
+    );
+  }
+
+  Widget _cardAdderss(){
+    return Container(
+      child: Card(
+        color: Colors.grey[800],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20)
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Text(
+            'Calle S/N, Avenida S/N',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _iconMyLocation() {
+    return Image.asset(
+      'assets/img/my_location.png',
+      width: 65,
+      height: 65,
+    );
+  }
+
   Widget _googleMaps(){
     return GoogleMap(
       mapType: MapType.normal,
       initialCameraPosition: _con.initialPosition,
       onMapCreated: _con.onMapCreated,
-      myLocationButtonEnabled: true,
-      mapToolbarEnabled: true,
+      myLocationButtonEnabled: false,
+      mapToolbarEnabled: false,
     );
   }
 
