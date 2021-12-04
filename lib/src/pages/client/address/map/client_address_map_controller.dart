@@ -26,6 +26,16 @@ class ClientAddressMapController {
     checkGPS();
   }
 
+  void selectRefPoint(){
+    Map<String, dynamic> data = {
+      'address': addressName,
+      'lat': addressLatLng.latitude,
+      'lng': addressLatLng.longitude,
+    };
+
+    Navigator.pop(context, data);
+  }
+
   Future<Null> selectLocationDraggableInfo() async{
     if(initialPosition != null){
       double lat = initialPosition.target.latitude;
