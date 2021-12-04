@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
@@ -8,6 +9,9 @@ class ClientAddressMapController {
   BuildContext context;
   Function refresh;
   Position _position;
+
+  String addressName;
+  LatLng addressLatLng;
 
   CameraPosition initialPosition = CameraPosition(
     target: LatLng(15.6596053,-92.1410327),
@@ -20,6 +24,28 @@ class ClientAddressMapController {
     this.context = context;
     this.refresh = refresh;
     checkGPS();
+  }
+
+  Future<Null> selectLocationDraggableInfo() async{
+    if(initialPosition != null){
+      double lat = initialPosition.target.latitude;
+      double lng = initialPosition.target.longitude;
+
+      List<Placemark> address = await placemarkFromCoordinates(lat, lng);
+      if(address != null){
+        if(address.length > 0){
+          String direction = address[0].thoroughfare;
+          String street = address[0].subThoroughfare;
+          String city = address[0].locality;
+          String department = address[0].administrativeArea;
+          String country = address[0].country;
+          addressName = '$direction #$street, $city, $department';
+          addressLatLng = new LatLng(lat, lng);
+
+          refresh();
+        }
+      }
+    }
   }
 
   void onMapCreated(GoogleMapController controller) {

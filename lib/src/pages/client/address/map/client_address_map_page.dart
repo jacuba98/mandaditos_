@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mandaditos_expres/src/pages/client/address/map/client_address_map_controller.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
@@ -83,7 +84,7 @@ class _ClientAddressMapPageState extends State<ClientAddressMapPage> {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
-            'Calle S/N, Avenida S/N',
+            _con.addressName ?? '',
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -110,6 +111,13 @@ class _ClientAddressMapPageState extends State<ClientAddressMapPage> {
       onMapCreated: _con.onMapCreated,
       myLocationButtonEnabled: false,
       mapToolbarEnabled: false,
+
+      onCameraMove: (position){
+        _con.initialPosition = position;
+      },
+      onCameraIdle: () async{
+        await _con.selectLocationDraggableInfo();
+      },
     );
   }
 
