@@ -10,22 +10,28 @@ class RestaurantOrdersListController {
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   Function refresh;
   User user;
+
   CategoriesProvider _categoriesProvider =  new CategoriesProvider();
-  List<Category> categories = [];
+
+  List<String> categories = ['PAGADO', 'DESPACHADO', 'EN CAMINO', 'ENTREGADO'];
+
+
 
   Future init(BuildContext context, Function refresh) async{
     this.context = context;
     this.refresh = refresh;
     user = User.fromJson(await _sharedPref.read('user'));
     _categoriesProvider.init(context, user);
-    getCatrgories();
+    //getCatrgories();
     refresh();
   }
 
+
+/*
   void getCatrgories() async{
     categories = await _categoriesProvider.getAll();
     refresh();
-  }
+  }*/
 
   void logout() {
     _sharedPref.logout(context, user.id);
