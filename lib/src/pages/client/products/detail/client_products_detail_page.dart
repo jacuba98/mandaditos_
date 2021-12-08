@@ -32,7 +32,7 @@ class _ClientProductsDetailPageState extends State<ClientProductsDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.9,
+      height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
           _imageSlideshow(),
@@ -200,7 +200,7 @@ class _ClientProductsDetailPageState extends State<ClientProductsDetailPage> {
                 image: _con.product?.image1 != null
                     ? NetworkImage(_con.product.image1)
                     : AssetImage('assets/img/no-image.png'),
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 fadeInDuration: Duration(milliseconds: 50),
                 placeholder: AssetImage('assets/img/no-image.png'),
               ),
@@ -208,7 +208,7 @@ class _ClientProductsDetailPageState extends State<ClientProductsDetailPage> {
                 image: _con.product?.image2 != null
                     ? NetworkImage(_con.product.image2)
                     : AssetImage('assets/img/no-image.png'),
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 fadeInDuration: Duration(milliseconds: 50),
                 placeholder: AssetImage('assets/img/no-image.png'),
               ),
@@ -216,7 +216,7 @@ class _ClientProductsDetailPageState extends State<ClientProductsDetailPage> {
                 image: _con.product?.image3 != null
                     ? NetworkImage(_con.product.image3)
                     : AssetImage('assets/img/no-image.png'),
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 fadeInDuration: Duration(milliseconds: 50),
                 placeholder: AssetImage('assets/img/no-image.png'),
               ),

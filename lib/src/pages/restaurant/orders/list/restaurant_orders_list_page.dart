@@ -4,6 +4,7 @@ import 'package:mandaditos_expres/src/models/category.dart';
 import 'package:mandaditos_expres/src/models/order.dart';
 import 'package:mandaditos_expres/src/pages/restaurant/orders/list/restaurant_orders_list_controller.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
+import 'package:mandaditos_expres/src/widgets/no_data_widget.dart';
 
 class RestaurantOrdersLitsPage extends StatefulWidget {
   const RestaurantOrdersLitsPage({Key key}) : super(key: key);
@@ -29,7 +30,7 @@ class _RestaurantOrdersLitsPageState extends State<RestaurantOrdersLitsPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: _con.categories?.length,
+      length: _con.status?.length,
       child: Scaffold(
         key: _con.key,
         appBar: PreferredSize(
@@ -49,9 +50,9 @@ class _RestaurantOrdersLitsPageState extends State<RestaurantOrdersLitsPage> {
                 labelColor: Colors.black,
                 unselectedLabelColor: Colors.grey[400],
                 isScrollable: true,
-                tabs: List<Widget>.generate(_con.categories.length, (index) {
+                tabs: List<Widget>.generate(_con.status.length, (index) {
                   return Tab(
-                    child: Text(_con.categories[index] ?? ''),
+                    child: Text(_con.status[index] ?? ''),
                   );
                 }),
               ),
@@ -59,37 +60,30 @@ class _RestaurantOrdersLitsPageState extends State<RestaurantOrdersLitsPage> {
         ),
         drawer: _drawer(),
         body: TabBarView(
-          children: _con.categories.map((String category) {
-            return Container(
-
-            );
-          /*return FutureBuilder(
-              future:_con.getProducts(category.id),
-              builder: (context, AsyncSnapshot<List<Product>> snapshot) {
+          children: _con.status.map((String status) {
+          return FutureBuilder(
+              future:_con.getOrders(status),
+              builder: (context, AsyncSnapshot<List<Order>> snapshot) {
 
                 if(snapshot.hasData){
                   if(snapshot.data.length > 0){
-                    return GridView.builder(
+                    return ListView.builder(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.7
-                        ),
                         itemCount: snapshot.data?.length ?? 0,
                         itemBuilder: (_, index){
-                          return _cardProduct(snapshot.data[index]);
+                          return _cardOrder(snapshot.data[index]);
                         }
                     );
                   }
                   else{
-                    return NoDataWidget(text: 'No hay productos');
+                    return NoDataWidget(text: 'No hay ordenes');
                   }
                 }
                 else{
-                  return NoDataWidget(text: 'No hay productos');
+                  return NoDataWidget(text: 'No hay ordenes');
                 }
               }
-          );*/
+          );
           }).toList(),
         ),
       ),
@@ -97,84 +91,89 @@ class _RestaurantOrdersLitsPageState extends State<RestaurantOrdersLitsPage> {
   }
 
   Widget _cardOrder(Order order){
-    return Container(
-      height: 160,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: Card(
-        elevation: 3.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15)
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-                child: Container(
-                  height: 30,
-                  width: MediaQuery.of(context).size.width * 1,
-                  decoration: BoxDecoration(
-                    color: MyColors.primaryColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    )
-                  ),
+    return GestureDetector(
+      onTap: (){
+        _con.openBottomSheet(order);
+      },
+      child: Container(
+        height: 150,
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        child: Card(
+          elevation: 3.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)
+          ),
+          child: Stack(
+            children: [
+              Positioned(
                   child: Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Orden #0',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontFamily: 'NimbisSans'
+                    height: 30,
+                    width: MediaQuery.of(context).size.width * 1,
+                    decoration: BoxDecoration(
+                      color: MyColors.primaryColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      )
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Orden #${order.id}',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontFamily: 'NimbisSans'
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 40,left: 20, right: 20),
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    width: double.infinity,
-                    child: Text(
-                      'Pedido: 2015-02-12',
-                      style: TextStyle(
-                          fontSize: 13
-                      ),
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    width: double.infinity,
-                    child: Text(
-                      'Cliente: Jorge Bartolon',
-                      style: TextStyle(
-                          fontSize: 13
-                      ),
-                      maxLines: 1,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    width: double.infinity,
-                    child: Text(
-                      'Entregar en: Calle s/n',
-                      style: TextStyle(
-                          fontSize: 13
-                      ),
-                      maxLines: 2,
-                    ),
-                  ),
-                ],
               ),
-            )
-          ],
+              Container(
+                margin: EdgeInsets.only(top: 40,left: 20, right: 20),
+                child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      width: double.infinity,
+                      child: Text(
+                        'Pedido: 2015-02-12',
+                        style: TextStyle(
+                            fontSize: 13
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      width: double.infinity,
+                      child: Text(
+                        'Cliente: ${order.client?.name ?? ''} ${order.client?.lastname ?? ''}',
+                        style: TextStyle(
+                            fontSize: 13
+                        ),
+                        maxLines: 1,
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      width: double.infinity,
+                      child: Text(
+                        'Entregar en: ${order.address?.address ?? ''}',
+                        style: TextStyle(
+                            fontSize: 13
+                        ),
+                        maxLines: 2,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

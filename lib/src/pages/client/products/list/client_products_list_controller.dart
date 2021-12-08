@@ -6,6 +6,7 @@ import 'package:mandaditos_expres/src/pages/client/products/detail/client_produc
 import 'package:mandaditos_expres/src/provider/categories_provider.dart';
 import 'package:mandaditos_expres/src/provider/products_provider.dart';
 import 'package:mandaditos_expres/src/utils/shared_pref.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ClientProductListController {
   BuildContext context;
@@ -37,7 +38,7 @@ class ClientProductListController {
   }
 
   void openBottomSheet(Product product){
-    showModalBottomSheet(
+    showMaterialModalBottomSheet(
         context: context,
         builder: (context) => ClientProductsDetailPage(product: product)
     );

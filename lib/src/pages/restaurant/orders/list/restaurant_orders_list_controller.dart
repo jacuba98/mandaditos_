@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mandaditos_expres/src/models/category.dart';
+import 'package:mandaditos_expres/src/models/order.dart';
 import 'package:mandaditos_expres/src/models/user.dart';
 import 'package:mandaditos_expres/src/provider/categories_provider.dart';
+import 'package:mandaditos_expres/src/provider/orders_provider.dart';
+import 'package:mandaditos_expres/src/pages/restaurant/orders/detail/restaurant_orders_detail_page.dart';
 import 'package:mandaditos_expres/src/utils/shared_pref.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class RestaurantOrdersListController {
   BuildContext context;
@@ -11,9 +15,9 @@ class RestaurantOrdersListController {
   Function refresh;
   User user;
 
-  CategoriesProvider _categoriesProvider =  new CategoriesProvider();
+  OrdersProvider _ordersProvider =  new OrdersProvider();
 
-  List<String> categories = ['PAGADO', 'DESPACHADO', 'EN CAMINO', 'ENTREGADO'];
+  List<String> status = ['PAGADO', 'DESPACHADO', 'EN CAMINO', 'ENTREGADO'];
 
 
 
@@ -21,9 +25,13 @@ class RestaurantOrdersListController {
     this.context = context;
     this.refresh = refresh;
     user = User.fromJson(await _sharedPref.read('user'));
-    _categoriesProvider.init(context, user);
+    _ordersProvider.init(context, user);
     //getCatrgories();
     refresh();
+  }
+
+  Future<List<Order>> getOrders(String status) async{
+    return await _ordersProvider.getByStatus(status);
   }
 
 
@@ -35,6 +43,13 @@ class RestaurantOrdersListController {
 
   void logout() {
     _sharedPref.logout(context, user.id);
+  }
+
+  void openBottomSheet(Order order){
+    showMaterialModalBottomSheet(
+        context: context,
+        builder: (context) => RestaurantOrdersDetailPage(order: order)
+    );
   }
 
   void goToCategoryCreate(){
