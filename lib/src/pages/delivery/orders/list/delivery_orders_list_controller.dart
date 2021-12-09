@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mandaditos_expres/src/models/category.dart';
 import 'package:mandaditos_expres/src/models/order.dart';
 import 'package:mandaditos_expres/src/models/user.dart';
+import 'package:mandaditos_expres/src/pages/delivery/orders/detail/restaurant_orders_detail_page.dart';
 import 'package:mandaditos_expres/src/provider/categories_provider.dart';
 import 'package:mandaditos_expres/src/provider/orders_provider.dart';
 import 'package:mandaditos_expres/src/pages/restaurant/orders/detail/restaurant_orders_detail_page.dart';
@@ -50,7 +51,7 @@ class DeliveryOrdersListController {
   void openBottomSheet(Order order) async{
     isUpdated = await showMaterialModalBottomSheet(
         context: context,
-        builder: (context) => RestaurantOrdersDetailPage(order: order)
+        builder: (context) => DeliveryOrdersDetailPage(order: order)
     );
 
     if(isUpdated){
