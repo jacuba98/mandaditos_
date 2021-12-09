@@ -15,6 +15,8 @@ class RestaurantOrdersListController {
   Function refresh;
   User user;
 
+  bool isUpdated;
+
   OrdersProvider _ordersProvider =  new OrdersProvider();
 
   List<String> status = ['PAGADO', 'DESPACHADO', 'EN CAMINO', 'ENTREGADO'];
@@ -45,11 +47,15 @@ class RestaurantOrdersListController {
     _sharedPref.logout(context, user.id);
   }
 
-  void openBottomSheet(Order order){
-    showMaterialModalBottomSheet(
+  void openBottomSheet(Order order) async{
+    isUpdated = await showMaterialModalBottomSheet(
         context: context,
         builder: (context) => RestaurantOrdersDetailPage(order: order)
     );
+
+    if(isUpdated){
+      refresh();
+    }
   }
 
   void goToCategoryCreate(){
