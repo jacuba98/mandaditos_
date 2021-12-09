@@ -49,7 +49,8 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
               indent: 30,
             ),
             _textDescription(),
-            _dropDown(_con.users),
+            _con.order.status != 'PAGADO' ? _deliveryData() : Container(),
+            _con.order.status == 'PAGADO' ? _dropDown(_con.users) : Container(),
             SizedBox(height: 10),
             _textData('Cliente', ' ${_con.order.client?.name ?? ''} ${_con.order.client?.lastname ?? ''}'),
             SizedBox(height: 8),
@@ -80,7 +81,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Text(
-        'Asignar repartidor',
+        _con.order.status == 'PAGADO' ? 'Asignar repartidor' : 'Repartidor asignado',
         style: TextStyle(
           fontStyle: FontStyle.italic,
           color: MyColors.primaryColor,
@@ -133,6 +134,30 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _deliveryData(){
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      child: Row(
+        children: [
+          Container(
+            height: 40,
+            width: 40,
+            child: FadeInImage(
+              image: _con.order.delivery?.image != null
+                  ? NetworkImage(_con.order.delivery?.image)
+                  : AssetImage('assets/img/no-image.png'),
+              fit: BoxFit.cover,
+              fadeInDuration: Duration(milliseconds: 50),
+              placeholder: AssetImage('assets/img/no-image.png'),
+            ),
+          ),
+          SizedBox(width: 5),
+          Text('${_con.order.delivery?.name ?? ''} ${_con.order.delivery?.lastname ?? ''}')
+        ],
       ),
     );
   }
