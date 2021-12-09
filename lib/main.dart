@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
         'client/address/create' : (BuildContext context) => ClientAddressCreatePage(),
         'client/address/map' : (BuildContext context) => ClientAddressMapPage(),
         'delivery/orders/list' : (BuildContext context) => DeliveryOrdersListPage(),
-        'restaurant/orders/list' : (BuildContext context) => RestaurantOrdersLitsPage(),
+        'restaurant/orders/list' : (BuildContext context) => RestaurantOrdersListPage(),
         'restaurant/categories/create' : (BuildContext context) => RestaurantCategoriesCreatePage(),
         'restaurant/products/create' : (BuildContext context) => RestaurantProductsCreatePage()
       },

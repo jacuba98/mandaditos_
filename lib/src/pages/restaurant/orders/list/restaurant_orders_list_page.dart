@@ -6,14 +6,14 @@ import 'package:mandaditos_expres/src/pages/restaurant/orders/list/restaurant_or
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
 import 'package:mandaditos_expres/src/widgets/no_data_widget.dart';
 
-class RestaurantOrdersLitsPage extends StatefulWidget {
-  const RestaurantOrdersLitsPage({Key key}) : super(key: key);
+class RestaurantOrdersListPage extends StatefulWidget {
+  const RestaurantOrdersListPage({Key key}) : super(key: key);
 
   @override
-  _RestaurantOrdersLitsPageState createState() => _RestaurantOrdersLitsPageState();
+  _RestaurantOrdersListPageState createState() => _RestaurantOrdersListPageState();
 }
 
-class _RestaurantOrdersLitsPageState extends State<RestaurantOrdersLitsPage> {
+class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
   RestaurantOrdersListController _con = new RestaurantOrdersListController();
 
   @override

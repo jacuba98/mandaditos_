@@ -62,7 +62,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
             ),
             SizedBox(height: 10),
             _textTotalPrice(),
-            _buttonNext()
+            _con.order.status == 'PAGADO' ? _buttonNext() : Container()
           ],
         ),
       ),
