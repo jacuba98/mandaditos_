@@ -7,6 +7,7 @@ import 'package:mandaditos_expres/src/models/user.dart';
 import 'package:mandaditos_expres/src/pages/client/orders/create/client_orders_create_controller.dart';
 import 'package:mandaditos_expres/src/pages/restaurant/orders/detail/restaurant_orders_detail_controller.dart';
 import 'package:mandaditos_expres/src/utils/my_colors.dart';
+import 'package:mandaditos_expres/src/utils/relative_time_util.dart';
 import 'package:mandaditos_expres/src/widgets/no_data_widget.dart';
 
 class RestaurantOrdersDetailPage extends StatefulWidget {
@@ -48,13 +49,16 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
               indent: 30,
             ),
             _textDescription(),
-            _dropDown([]),
+            _dropDown(_con.users),
             SizedBox(height: 10),
             _textData('Cliente', ' ${_con.order.client?.name ?? ''} ${_con.order.client?.lastname ?? ''}'),
             SizedBox(height: 8),
             _textData('Entregar en:', ' ${_con.order.address?.address ?? ''}'),
             SizedBox(height: 8),
-            _textData('Fecha de pedido:', ' ${_con.order.timestamp ?? ''}'),
+            _textData(
+              'Fecha de pedido:',
+              ' ${RelativeTimeUtil.getRelativeTime(_con.order.timestamp ?? 0)}'
+            ),
             SizedBox(height: 10),
             _textTotalPrice(),
             _buttonNext()
@@ -117,11 +121,11 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
                     ),
                   ),
                   items: _dropDownItems(users),
-                  //value: _con.idCategory,
+                  value: _con.idDelivery,
                   onChanged: (option) {
                     setState(() {
                       print('Repartidor seleccionda $option');
-                      //_con.idCategory = option; // ESTABLECIENDO EL VALOR SELECCIONADO
+                      _con.idDelivery = option; // ESTABLECIENDO EL VALOR SELECCIONADO
                     });
                   },
                 ),
@@ -135,10 +139,27 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
 
   List<DropdownMenuItem<String>> _dropDownItems(List<User> users) {
     List<DropdownMenuItem<String>> list = [];
-    users.forEach((user) {
+    users.forEach((users) {
       list.add(DropdownMenuItem(
-        child: Text(user.name),
-        value: user.id,
+        child: Row(
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              child: FadeInImage(
+                image: users.image != null
+                    ? NetworkImage(users.image)
+                    : AssetImage('assets/img/no-image.png'),
+                fit: BoxFit.cover,
+                fadeInDuration: Duration(milliseconds: 50),
+                placeholder: AssetImage('assets/img/no-image.png'),
+              ),
+            ),
+            SizedBox(width: 5),
+            Text(users.name)
+          ],
+        ),
+        value: users.id,
       ));
     });
 
@@ -235,7 +256,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
               Text(
                 'Cantidad: ${product.quantity}',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold
+                    fontSize: 13
                 ),
               ),
             ],
@@ -272,9 +293,9 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
 
   Widget _imageProduct(Product product){
     return Container(
-      width: 90,
-      height: 90,
-      padding: EdgeInsets.all(10),
+      width: 60,
+      height: 60,
+      padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           color: Colors.grey[200]
