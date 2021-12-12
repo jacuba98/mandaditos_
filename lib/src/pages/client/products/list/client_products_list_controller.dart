@@ -52,6 +52,10 @@ class ClientProductListController {
     key.currentState.openDrawer();
   }
 
+  void goToOrdersList(){
+    Navigator.pushNamed(context, 'client/orders/list');
+  }
+
   void goToUpdatePage(){
     Navigator.pushNamed(context, 'client/update');
   }
