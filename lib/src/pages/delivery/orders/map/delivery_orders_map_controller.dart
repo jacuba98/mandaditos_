@@ -245,6 +245,35 @@ class DeliveryOrdersMapController {
       ));
     }
   }
+  void launchWaze() async {
+    var url = 'waze://?ll=${order.address.lat.toString()},${order.address.lng.toString()}';
+    var fallbackUrl =
+        'https://waze.com/ul?ll=${order.address.lat.toString()},${order.address.lng.toString()}&navigate=yes';
+    try {
+      bool launched =
+      await launch(url, forceSafariVC: false, forceWebView: false);
+      if (!launched) {
+        await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+      }
+    } catch (e) {
+      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+    }
+  }
+
+  void launchGoogleMaps() async {
+    var url = 'google.navigation:q=${order.address.lat.toString()},${order.address.lng.toString()}';
+    var fallbackUrl =
+        'https://www.google.com/maps/search/?api=1&query=${order.address.lat.toString()},${order.address.lng.toString()}';
+    try {
+      bool launched =
+      await launch(url, forceSafariVC: false, forceWebView: false);
+      if (!launched) {
+        await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+      }
+    } catch (e) {
+      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+    }
+  }
 
   void call(){
     launch('tel://${order.client.phone}');
