@@ -135,9 +135,34 @@ class OrdersProvider {
       print('Error $e');
       return null;
     }
-  }Future<ResponseApi> updateToDelivery(Order order) async{
+  }
+
+  Future<ResponseApi> updateToDelivery(Order order) async{
     try {
       Uri url = Uri.http(_url, '$_api/updateToDelivered');
+      String bodyParams = json.encode(order);
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Authorization': sessionUser.sessionToken
+      };
+      final res = await http.put(url, headers: headers, body: bodyParams);
+      if(res.statusCode == 401){
+        Fluttertoast.showToast(msg: '¡La session expiro!');
+        new SharedPref().logout(context, sessionUser.id);
+      }
+      final data = json.decode(res.body);
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    }
+    catch(e){
+      print('Error $e');
+      return null;
+    }
+  }
+
+  Future<ResponseApi> updateLatLng(Order order) async{
+    try {
+      Uri url = Uri.http(_url, '$_api/updateLatLng');
       String bodyParams = json.encode(order);
       Map<String, String> headers = {
         'Content-type': 'application/json',

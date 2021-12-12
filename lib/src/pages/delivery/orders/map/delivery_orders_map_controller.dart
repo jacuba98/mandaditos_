@@ -16,6 +16,7 @@ import 'package:mandaditos_expres/src/utils/my_colors.dart';
 import 'package:mandaditos_expres/src/utils/my_snackbar.dart';
 import 'package:mandaditos_expres/src/utils/shared_pref.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class DeliveryOrdersMapController {
   BuildContext context;
@@ -34,7 +35,10 @@ class DeliveryOrdersMapController {
 
   StreamSubscription _positionStream;
 
+  IO.Socket socket;
+
   OrdersProvider _ordersProvider = new OrdersProvider();
+
 
   CameraPosition initialPosition = CameraPosition(
     target: LatLng(15.6596053,-92.1410327),
@@ -54,10 +58,32 @@ class DeliveryOrdersMapController {
     order = Order.fromJson(ModalRoute.of(context).settings.arguments as Map<String, dynamic>);
     deliveryMarker = await createMarkerFromAsset('assets/img/delivery2.png');
     homeMarker = await createMarkerFromAsset('assets/img/home.png');
+
+    socket = IO.io('http://${Enviroment.API_DELIVERY}/orders/delivery', <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false
+    });
+    socket.connect();
+
+
     user = User.fromJson(await _sharedPref.read('user'));
     _ordersProvider.init(context, user);
     print('Orden: ${order.toJson()}');
     checkGPS();
+  }
+
+  void emitPosition(){
+    socket.emit('position', {
+      'id_order': order.id,
+      'lat': _position.latitude,
+      'lng': _position.longitude
+    });
+  }
+
+  void  saveLocation() async{
+    order.lat = _position.latitude;
+    order.lng = _position.longitude;
+    await _ordersProvider.updateLatLng(order);
   }
 
   void isCloseToDeliveryPosition(){
@@ -109,6 +135,7 @@ class DeliveryOrdersMapController {
 
   void dispose(){
     _positionStream?.cancel();
+    socket?.disconnect();
   }
 
   void addMarker(String markerId, double lat, double lng, String title, String content, BitmapDescriptor iconMarker){
@@ -171,6 +198,7 @@ class DeliveryOrdersMapController {
 
       await _determinePosition(); // OBTENER LA POSICION ACTUAL Y TAMBIEN SOLICITAR LOS PERMISOS
       _position = await Geolocator.getLastKnownPosition(); // LAT Y LNG
+      saveLocation();
       animateCameraToPosition(_position.latitude, _position.longitude);
       addMarker(
           'Delivery',
@@ -201,6 +229,7 @@ class DeliveryOrdersMapController {
           distanceFilter: 1
       ).listen((Position position) {
         _position = position;
+        emitPosition();
         addMarker(
             'Delivery',
             _position.latitude,
