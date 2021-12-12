@@ -30,6 +30,7 @@ class _ClientUpdatePageState extends State<ClientUpdatePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Editar perfil'),
+        backgroundColor: MyColors.primaryColor,
       ),
       body: Container(
           width: double.infinity,
