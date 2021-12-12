@@ -52,9 +52,9 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
             ),
 
             SizedBox(height: 10),
-            _textData('Cliente', ' ${_con.order.client?.name ?? ''} ${_con.order.client?.lastname ?? ''}'),
+            _textData('Repartidor', ' ${_con.order?.delivery?.name ?? 'No asignado'} ${_con.order.delivery?.lastname ?? ''}'),
             SizedBox(height: 8),
-            _textData('Entregar en:', ' ${_con.order.address?.address ?? ''}'),
+            _textData('Entregar en:', ' ${_con.order?.address?.address ?? ''}'),
             SizedBox(height: 8),
             _textData(
               'Fecha de pedido:',
@@ -62,7 +62,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
             ),
             SizedBox(height: 10),
             _textTotalPrice(),
-            _con.order.status != 'ENTREGADO' ? _buttonNext() : Container()
+            _con.order?.status == 'EN CAMINO' ? _buttonNext() : Container()
           ],
         ),
       ),
@@ -104,7 +104,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
       child: ElevatedButton(
         onPressed: _con.updateOrder,
         style: ElevatedButton.styleFrom(
-            primary: _con.order?.status == 'DESPACHADO' ? Colors.blue : Colors.green,
+            primary: Colors.blue,
             padding: EdgeInsets.symmetric(vertical: 5),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)
@@ -118,7 +118,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
                 height: 50,
                 alignment: Alignment.center,
                 child: Text(
-                  _con.order?.status == 'DESPACHADO' ? 'INICIAR ENTREGA' : 'IR AL MAPA',
+                  'SEGUIR ENTREGA',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold
