@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mandaditos_expres/src/models/category.dart';
 import 'package:mandaditos_expres/src/models/product.dart';
@@ -15,6 +17,8 @@ class ClientProductListController {
   CategoriesProvider _categoriesProvider =  new CategoriesProvider();
   ProductsProvider _productsProvider =  new ProductsProvider();
   List<Category> categories = [];
+  Timer searchOnStoppedTyping;
+  String productName = '';
 
   SharedPref _sharedPref =  new SharedPref();
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
@@ -28,13 +32,34 @@ class ClientProductListController {
     getCategories();
     refresh();
   }
-  Future<List<Product>> getProducts(String idCategory) async{
-    return await _productsProvider.getByCategory(idCategory);
+  Future<List<Product>> getProducts(String idCategory, String productName) async{
+    if(productName.isEmpty){
+      return await _productsProvider.getByCategory(idCategory);
+    }
+    else{
+      return await _productsProvider.getByCategoryAndProductName(idCategory, productName);
+    }
   }
 
   void getCategories() async {
     categories = await _categoriesProvider.getAll();
     refresh();
+  }
+
+  void onChangeText(String text){
+    Duration duration = Duration(milliseconds: 800);
+
+    if(searchOnStoppedTyping != null){
+      searchOnStoppedTyping.cancel();
+      refresh();
+    }
+
+    searchOnStoppedTyping =  new Timer(duration, () {
+      productName = text;
+      refresh();
+
+      print('Producto: $productName');
+    });
   }
 
   void openBottomSheet(Product product){
